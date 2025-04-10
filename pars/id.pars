@@ -1,0 +1,22 @@
+[parameters]
+
+Nt = 600
+N = 401
+output_interval = 3
+
+x_L = -50.0
+x_R =  50.0
+
+level = 1
+
+cfl = 0.5
+
+deriv_type = KP4
+bctype = 4
+
+idtype = 1
+pulse_center = 0.0
+pulse_width = 8
+
+output_dir = output
+

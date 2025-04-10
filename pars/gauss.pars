@@ -1,0 +1,22 @@
+[parameters]
+
+Nt = 600
+N = 101
+output_interval = 3
+
+x_L = 0.0
+x_R = 1.0
+
+level = 1
+
+cfl = 0.5
+
+deriv_type = JTP6
+bctype = 2
+
+idtype = 0
+pulse_center = 0.5
+pulse_width = 0.05
+
+output_dir = output
+
