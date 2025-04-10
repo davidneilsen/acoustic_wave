@@ -64,3 +64,5 @@ Parameter files are located in the pars directory.
 Example usage:
 
     python3 acoustic_wave.py id.pars
+
+Output files are written to a subdirectory.  These are simple 1D ascii files in the `curve` format that is read by ViSIT.
