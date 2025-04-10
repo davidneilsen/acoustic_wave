@@ -5,7 +5,25 @@ from the paper by Wu and Kim (2024).
 
 ## Compact Finite Derivatives
 
-These are defined in the `bandedCompactDerivatives.py` file.  The linear system is solved using LAPACK.
+Several compact finite difference operators are defined in the `bandedCompactDerivatives.py` file.  These derivatives are written as a linear system
+```math
+{\bf P}\, f' = {\bf Q}\, f
+```
+where $\bf P$ is either a tridiagonal or pentadiagonal matrix, $\bf Q$ is a banded matrix, and $f'$ is the derivative of the function $f(x)$.  The linear system is solved as
+```math
+{\bf P} f' = b,
+```
+for $b = {\bf Q}f$.  The linear system is solved using LAPACK routines in `scipy.linalg`.  The solution method for the linear system is chosen when the class is instantiated.  When the parameter `lusolve=True`, the linear system is solved directly with LU decomposition.  When `lusolve=False`, the system is solved using `scipy.linalg.solve_banded`.
+
+The options for the derivatives are
+
+    1. E4 Explicit finite difference, O(h^4)
+    2. E6 Explicit finite difference, O(h^6) 
+    3. JTT4 Compact finite difference, O(h^4), Tridiagonal system, Jonathan Tyler 
+    4. JTT6 Compact finite difference, O(h^6), Tridiagonal system, Jonathan Tyler 
+    5. JTP6 Compact finite difference, O(h^6), Pentadiagonal system, Jonathan Tyler 
+    6. KP4 Compact finite difference, O(h^4), optimized Pentadiagonal system, Wu and Kim (Table III)
+    7. SP4 Compact finite difference, O(h^4), "standard" Pentadiagonal system, Wu and Kim  (Table I)
 
 ## Testing Derivative Operators
 
@@ -49,17 +67,34 @@ with the no-penetration boundary conditions
 
 The boundary condition for P is either left free, or the first derivative is set to zero after each RK step.
 
-The equations are solved using the Method of Lines with RK4.  The spatial derivatives are computed using either explicit or compact finite differences.  The available derivatives are:
+The equations are solved using the Method of Lines with RK4.  The spatial derivatives are computed using either explicit or compact finite differences.
 
-    * E4 = explicit fourth-order
-    * E6 = explicit sixth-order
-    * JTT4 = compact fourth-order, tridiagonal system
-    * JTT6 = compact sixth-order, tridiagonal system
-    * JTP6 = compact sixth-order, pentadiagonal system
-    * KP4 = compact fourth-order, pentadiagonal system
-    * SP4 = compact fourth-order, pentadiagonal system
+Parameter files are located in the `pars` directory.  Options are:
 
-Parameter files are located in the pars directory.
+    - Nt = number of iterations
+    - N = Base number of points
+    - output_interval = frequency for writing output files
+    - x_L = left boundary
+    - x_R = right boundary
+    - level = level for convergence testing.
+    - cfl = Courant factor
+    - deriv_type = spatial derivative (E4, E6, JTT4, JTT6, JTP6, KP4, SP4)
+    - bctype = boundary condition for p.  
+        - 0 = no condition on p
+        - 2 = dp/dx = 0, 2nd order
+        - 4 = dp/dx = 0, 4th order
+    - idtype = initial data type
+        -  0 = simple Gaussian
+        -  1 = simple Gaussian * cos(x) [Used by Wu and Kim]
+    - pulse_center = Gaussian center
+    - pulse_width = Gaussian width
+    - output_dir = directory for output
+
+To simplify convergence testing, use the `level` parameter.  The number of points is 
+```math
+    Nx = 2^\ell N + 1
+```
+where $\ell$ is the level and $N$ is the Base number of points (an even integer).
 
 Example usage:
 
