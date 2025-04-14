@@ -149,12 +149,13 @@ class CompactDerivative:
         '''
         N = self.N
 
-        alpha = 0.5
-        beta = 1.0 / 20
+        alpha = 0.5862704032801503
+        beta = 9.549533555017055e-2
 
-        a1 = 17.0 / 24
-        a2 = 101.0 / 600
-        a3 = 1.0 / 600
+        a1 = 0.6431406736919156
+        a2 = 0.2586011023495066
+        a3 = 7.140953479797375e-3
+
         coeffs = np.array([ -a3, -a2, -a1, 0.0, a1, a2, a3 ])
 
         # i = 0
@@ -398,6 +399,11 @@ class CompactDerivative:
 
         return B
 
+    def write_matrix(filename, A):
+        with open(filename, "w") as f:
+            for row in A:
+                line = ' '.join(f"{val:.1e}" for val in row)
+                f.write(line + '\n')
 
     def evaluate(self, f):
         idx = 1.0 / self.dx
